@@ -1,13 +1,42 @@
 <template>
-	<div>
-		<h1>Enter the Location</h1>
-		<input type="text" name="searchInput" v-model="searchedLocation" />
-		<button type="submit" @click="searchDate">Search</button>
-		<p>{{ searchedLocation }}</p>
-		<p>Year: {{dateYear}}</p>
-		<p>Month: {{dateMonth}}</p>
-		<p>Day: {{dateDay}}</p>
-		<p>Data: {{data}}</p>
+	<div id="weather" class="col-md-8 offset-md-2 text-center">
+		<h1>Weather App</h1>
+		<div class="col-md-8 offset-md-2">
+			<v-text-field
+				label="Enter the location"
+				width="300"
+				v-model="searchedLocation"
+			></v-text-field>
+		</div>
+		<v-btn small color="primary" @click="searchDate" class="mb-5"
+			>Search</v-btn
+		>
+		<div v-show="weatherCityList != ''">
+			<v-expansion-panels>
+				<v-expansion-panel
+					@click="details(weatherCity.woeid)"
+					v-for="weatherCity in weatherCityList"
+					:key="weatherCity.woeid"
+				>
+					<v-expansion-panel-header>
+						{{ weatherCity.title }}
+					</v-expansion-panel-header>
+					<v-expansion-panel-content
+						v-for="weatherData in weatherDataList"
+						:key="weatherData.id"
+					>
+						<p>Date: {{ weatherData.applicable_date }}</p>
+						<p>
+							Weather State: {{ weatherData.weather_state_name }}
+						</p>
+						<p>Min Temp: {{ Math.round(weatherData.min_temp) }}</p>
+						<p>Max Temp: {{ Math.round(weatherData.max_temp) }}</p>
+						<p>Humidity: {{ weatherData.humidity }}</p>
+						<hr />
+					</v-expansion-panel-content>
+				</v-expansion-panel>
+			</v-expansion-panels>
+		</div>
 	</div>
 </template>
 
@@ -18,24 +47,38 @@ export default {
 	data() {
 		return {
 			searchedLocation: this.value,
-			data: [],
-			dateYear: (new Date()).getFullYear(),
-			dateMonth: (new Date()).getMonth() + 1,
-			dateDay: (new Date()).getDate()
+			weatherCityList: [],
+			weatherDataList: [],
 		};
 	},
 	methods: {
 		searchDate() {
 			console.log(this.searchedLocation);
 			axios
-			.get(`https://www.metaweather.com/api/location/search/?query=` + this.searchedLocation)
-			.then((response) => {
-				this.data = response.data;
-			})
-			.catch((e) => {
-				this.errors.push(e);
-			});
-		}
+				.get(
+					`https://www.metaweather.com/api/location/search/?query=` +
+						this.searchedLocation
+				)
+				.then((res) => {
+					this.weatherCityList = res.data;
+					console.table(this.weatherCityList);
+				})
+				.catch((e) => {
+					this.errors.push(e);
+				});
+		},
+		details(woeId) {
+			console.log(woeId);
+			axios
+				.get(`https://www.metaweather.com/api/location/` + woeId)
+				.then((res) => {
+					this.weatherDataList = res.data.consolidated_weather;
+					console.table(this.weatherDataList);
+				})
+				.catch((e) => {
+					this.errors.push(e);
+				});
+		},
 	},
 };
 </script>
