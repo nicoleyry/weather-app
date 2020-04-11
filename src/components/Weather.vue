@@ -93,6 +93,10 @@
 import axios from "axios";
 import BarChart from "@/components/BarChart";
 import PieChart from "@/components/PieChart";
+
+const cors = 'https://cors-anywhere.herokuapp.com/'; // use cors-anywhere to fetch api data
+const url = 'https://www.metaweather.com/'; // origin api url
+
 export default {
 	name: "Weather",
 	components: {
@@ -115,7 +119,7 @@ export default {
 		searchDate() {
 			axios
 				.get(
-					`https://www.metaweather.com/api/location/search/?query=` +
+					`${cors}${url}api/location/search/?query=` +
 						this.searchedLocation
 				)
 				.then(res => {
@@ -128,7 +132,7 @@ export default {
 		details(woeId) {
 			this.loading = true;
 			axios
-				.get(`https://www.metaweather.com/api/location/` + woeId)
+				.get(`${cors}${url}/api/location/` + woeId)
 				.then(res => {
 					this.weatherDataList = res.data.consolidated_weather;
 					this.maxTempData = this.weatherDataList.map(
