@@ -14,11 +14,12 @@
 		<v-row v-show="weatherCityList != ''">
 			<v-expansion-panels>
 				<v-expansion-panel
+					style="background: #f9f7f7;"
 					@click="details(weatherCity.woeid)"
 					v-for="weatherCity in weatherCityList"
 					:key="weatherCity.woeid"
 				>
-					<v-expansion-panel-header style="font-size: 24px">
+					<v-expansion-panel-header style="font-size: 24px; color: #112d4e;">
 						{{ weatherCity.title }}
 					</v-expansion-panel-header>
 					<v-expansion-panel-content v-if="loading">
@@ -37,7 +38,7 @@
 								v-for="weatherData in weatherDataList"
 								:key="weatherData.id"
 							>
-								<h3>{{ weatherData.applicable_date }}</h3>
+								<h3 class="details__date">{{ weatherData.applicable_date }}</h3>
 								<img
 									:src="
 										`https://www.metaweather.com/static/img/weather/${weatherData.weather_state_abbr}.svg`
@@ -157,6 +158,11 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+#weather {
+	h1 {
+		color: #112d4e;
+	}
+}
 input {
 	width: 50%;
 	height: 20px;
@@ -169,8 +175,12 @@ button {
 	&__block {
 		margin: 10px 0;
 	}
+	&__date {
+		color: #112d4e;
+	}
 	&__label {
 		font-weight: bold;
+		color: #112d4e;
 	}
 	&__text {
 		margin-bottom: 5px;
