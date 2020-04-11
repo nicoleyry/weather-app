@@ -32,6 +32,7 @@
 								:chartdata="maxTempData"
 								:chartlabels="chartlabels"
 								label="Max Temp"
+								title="Max Tempture"
 							/>
 						</div>
 						<div class="chart-block">
@@ -40,9 +41,18 @@
 								:chartdata="minTempData"
 								:chartlabels="chartlabels"
 								label="Min Temp"
+								title="Min Tempture"
 							/>
 						</div>
-
+						<div class="chart-block">
+							<pie-chart 
+								v-if="loaded"
+								:chartdata="humidityData"
+								:chartlabels="chartlabels"
+								label="Humidity"
+								title="Humidity"
+							/>
+						</div>
 						<!-- <p>Date: {{ weatherData.applicable_date }}</p>
 						<p>
 							Weather State: {{ weatherData.weather_state_name }}
@@ -60,10 +70,12 @@
 <script>
 import axios from "axios";
 import BarChart from "@/components/BarChart";
+import PieChart from "@/components/PieChart";
 export default {
 	name: "Weather",
 	components: {
 		BarChart,
+		PieChart
 	},
 	data() {
 		return {
@@ -73,6 +85,7 @@ export default {
 			loaded: false,
 			maxTempData: null,
 			minTempData: null,
+			humidityData: null,
 			chartlabels: [],
 		};
 	},
@@ -102,6 +115,9 @@ export default {
 					this.minTempData = this.weatherDataList.map(
 						(e) => `${Math.round(e.min_temp)}`
 					);
+					this.humidityData = this.weatherDataList.map(
+						(e) => `${e.humidity}`
+					);
 					this.chartlabels = this.weatherDataList.map(
 						(e) => `${e.applicable_date}`
 					);
@@ -124,7 +140,7 @@ button {
 	margin: 0 10px;
 }
 .chart-block {
-	max-width: 200px;
+	max-width: 300px;
 	margin: 50px 10px;
 	display: inline-block;
 }

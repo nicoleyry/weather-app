@@ -1,8 +1,8 @@
 <script>
-import { Bar } from "vue-chartjs";
+import { Pie } from "vue-chartjs";
 
 export default {
-	extends: Bar,
+	extends: Pie,
 	props: {
 		chartdata: {
 			type: Array,
@@ -28,26 +28,6 @@ export default {
 					display: true,
 					text: this.title,
 					fontSize: 16,
-				},
-				scales: {
-					yAxes: [
-						{
-							ticks: {
-								beginAtZero: true,
-								stepSize: 1, // 設定 y 軸的數字級距
-							},
-							gridLines: {
-								display: true,
-							},
-						},
-					],
-					xAxes: [
-						{
-							gridLines: {
-								display: false,
-							},
-						},
-					],
 				},
 				legend: {
 					display: false,
