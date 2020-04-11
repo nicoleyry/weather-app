@@ -121,8 +121,8 @@ export default {
 				.then(res => {
 					this.weatherCityList = res.data;
 				})
-				.catch(e => {
-					this.errors.push(e);
+				.catch(error => {
+					console.log(error);
 				});
 		},
 		details(woeId) {
@@ -146,7 +146,6 @@ export default {
 					this.loading = false;
 				})
 				.catch(error => {
-					this.errors.push(error);
 					console.log(error);
 				});
 		}
