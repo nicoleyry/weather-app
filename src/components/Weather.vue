@@ -21,7 +21,15 @@
 					<v-expansion-panel-header style="font-size: 24px">
 						{{ weatherCity.title }}
 					</v-expansion-panel-header>
-					<v-expansion-panel-content>
+					<v-expansion-panel-content v-if="loading">
+						<div class="loading_box">
+							<p>Loading...</p>
+							<div class="line"></div>
+							<div class="line"></div>
+							<div class="line"></div>
+						</div>
+					</v-expansion-panel-content>
+					<v-expansion-panel-content v-else>
 						<v-row>
 							<v-col
 								cols="2"
@@ -48,7 +56,7 @@
 						</v-row>
 						<div class="chart-block">
 							<bar-chart
-								v-if="loaded"
+								v-if="!loading"
 								:chartdata="maxTempData"
 								:chartlabels="chartlabels"
 								label="Max Temp (°C)"
@@ -58,7 +66,7 @@
 						</div>
 						<div class="chart-block">
 							<bar-chart
-								v-if="loaded"
+								v-if="!loading"
 								:chartdata="minTempData"
 								:chartlabels="chartlabels"
 								label="Min Temp (°C)"
@@ -68,7 +76,7 @@
 						</div>
 						<div class="chart-block">
 							<pie-chart
-								v-if="loaded"
+								v-if="!loading"
 								:chartdata="humidityData"
 								:chartlabels="chartlabels"
 								title="Humidity (%)"
@@ -89,18 +97,18 @@ export default {
 	name: "Weather",
 	components: {
 		BarChart,
-		PieChart,
+		PieChart
 	},
 	data() {
 		return {
 			searchedLocation: this.value,
 			weatherCityList: [],
 			weatherDataList: [],
-			loaded: false,
+			loading: true,
 			maxTempData: null,
 			minTempData: null,
 			humidityData: null,
-			chartlabels: [],
+			chartlabels: []
 		};
 	},
 	methods: {
@@ -110,39 +118,39 @@ export default {
 					`https://www.metaweather.com/api/location/search/?query=` +
 						this.searchedLocation
 				)
-				.then((res) => {
+				.then(res => {
 					this.weatherCityList = res.data;
 				})
-				.catch((e) => {
+				.catch(e => {
 					this.errors.push(e);
 				});
 		},
 		details(woeId) {
-			this.loaded = false;
+			this.loading = true;
 			axios
 				.get(`https://www.metaweather.com/api/location/` + woeId)
-				.then((res) => {
+				.then(res => {
 					this.weatherDataList = res.data.consolidated_weather;
 					this.maxTempData = this.weatherDataList.map(
-						(e) => `${Math.round(e.max_temp)}`
+						e => `${Math.round(e.max_temp)}`
 					);
 					this.minTempData = this.weatherDataList.map(
-						(e) => `${Math.round(e.min_temp)}`
+						e => `${Math.round(e.min_temp)}`
 					);
 					this.humidityData = this.weatherDataList.map(
-						(e) => `${e.humidity}`
+						e => `${e.humidity}`
 					);
 					this.chartlabels = this.weatherDataList.map(
-						(e) => `${e.applicable_date}`
+						e => `${e.applicable_date}`
 					);
-					this.loaded = true;
+					this.loading = false;
 				})
-				.catch((error) => {
+				.catch(error => {
 					this.errors.push(error);
 					console.log(error);
 				});
-		},
-	},
+		}
+	}
 };
 </script>
 <style lang="scss" scoped>
@@ -169,5 +177,35 @@ button {
 	max-width: 200px;
 	margin: 10px;
 	display: inline-block;
+}
+.loading_box {
+	margin: 20px;
+}
+.line {
+	display: inline-block;
+	width: 15px;
+	height: 15px;
+	border-radius: 15px;
+	background-color: #4b9cdb;
+}
+.loading_box .line:nth-last-child(1) {
+	animation: loadingAni 0.6s 0.1s linear infinite;
+}
+.loading_box .line:nth-last-child(2) {
+	animation: loadingAni 0.6s 0.2s linear infinite;
+}
+.loading_box .line:nth-last-child(3) {
+	animation: loadingAni 0.6s 0.3s linear infinite;
+}
+@keyframes loadingAni {
+	0% {
+		transform: translate(0, 0);
+	}
+	50% {
+		transform: translate(0, 15px);
+	}
+	100% {
+		transform: translate(0, 0);
+	}
 }
 </style>
