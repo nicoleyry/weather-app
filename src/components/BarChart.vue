@@ -20,6 +20,10 @@ export default {
 			type: String,
 			required: true
 		},
+		color: {
+			type: String,
+			required: true
+		},
 	},
 	data() {
 		return {
@@ -34,7 +38,8 @@ export default {
 						{
 							ticks: {
 								beginAtZero: true,
-								stepSize: 1, // 設定 y 軸的數字級距
+								stepSize: 5,
+								max: 30,
 							},
 							gridLines: {
 								display: true,
@@ -50,8 +55,8 @@ export default {
 					],
 				},
 				legend: {
-					display: false,
-				},
+            display: false,
+        },
 				responsive: true,
 				maintainAspectRatio: false,
 			},
@@ -63,11 +68,10 @@ export default {
 				labels: this.chartlabels,
 				datasets: [
 					{
+						data: this.chartdata,
 						label: this.label,
 						pointBackgroundColor: "white",
-						pointBorderColor: "#249EBF",
-						backgroundColor: "#249EBF",
-						data: this.chartdata,
+						backgroundColor: this.color,
 					},
 				],
 			},

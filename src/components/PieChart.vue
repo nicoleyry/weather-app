@@ -1,5 +1,8 @@
 <script>
 import { Pie } from "vue-chartjs";
+import patternomaly from 'patternomaly';
+
+const chartColors = ['#41b883','#35495e','#54457f','#f5ee9e','#fe5f55','#ea8c55','#5f0f40'];
 
 export default {
 	extends: Pie,
@@ -14,7 +17,7 @@ export default {
 		},
 		title: {
 			type: String,
-			required: true
+			required: true,
 		},
 	},
 	data() {
@@ -24,9 +27,6 @@ export default {
 					display: true,
 					text: this.title,
 					fontSize: 16,
-				},
-				legend: {
-					display: false,
 				},
 				responsive: true,
 				maintainAspectRatio: false,
@@ -39,10 +39,9 @@ export default {
 				labels: this.chartlabels,
 				datasets: [
 					{
-						pointBackgroundColor: "white",
-						pointBorderColor: "#249EBF",
-						backgroundColor: "#249EBF",
 						data: this.chartdata,
+						pointBackgroundColor: "white",
+						backgroundColor: patternomaly.generate(chartColors),
 					},
 				],
 			},

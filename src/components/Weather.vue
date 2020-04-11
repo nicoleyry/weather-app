@@ -8,9 +8,9 @@
 				v-model="searchedLocation"
 			></v-text-field>
 		</div>
-		<v-btn small color="primary" @click="searchDate" class="mb-5"
-			>Search</v-btn
-		>
+		<v-btn large color="primary" @click="searchDate" class="mb-5">
+			Search
+		</v-btn>
 		<v-row v-show="weatherCityList != ''">
 			<v-expansion-panels>
 				<v-expansion-panel
@@ -18,21 +18,32 @@
 					v-for="weatherCity in weatherCityList"
 					:key="weatherCity.woeid"
 				>
-					<v-expansion-panel-header>
+					<v-expansion-panel-header style="font-size: 24px">
 						{{ weatherCity.title }}
 					</v-expansion-panel-header>
 					<v-expansion-panel-content>
 						<v-row>
 							<v-col
 								cols="2"
-								class="details-block"
+								class="details__block"
 								v-for="weatherData in weatherDataList"
 								:key="weatherData.id"
 							>
-								<h4>{{ weatherData.applicable_date }}</h4>
-								<img :src="`https://www.metaweather.com/static/img/weather/${weatherData.weather_state_abbr}.svg`">
-								<p>{{ Math.round(weatherData.min_temp) }}°C ~ {{ Math.round(weatherData.max_temp) }}°C</p>
-								<p>Humidity:{{ weatherData.humidity }}%</p>
+								<h3>{{ weatherData.applicable_date }}</h3>
+								<img
+									:src="
+										`https://www.metaweather.com/static/img/weather/${weatherData.weather_state_abbr}.svg`
+									"
+								/>
+								<p class="details__text">
+									<span class="details__label">Max:</span>
+									{{ Math.round(weatherData.min_temp) }}°C
+								</p>
+								<p class="details__text">
+									<span class="details__label">Min:</span>
+									{{ Math.round(weatherData.max_temp) }}°C
+								</p>
+								<p>{{ weatherData.humidity }}%</p>
 							</v-col>
 						</v-row>
 						<div class="chart-block">
@@ -42,6 +53,7 @@
 								:chartlabels="chartlabels"
 								label="Max Temp (°C)"
 								title="Max Tempture (°C)"
+								color="#f38181"
 							/>
 						</div>
 						<div class="chart-block">
@@ -51,6 +63,7 @@
 								:chartlabels="chartlabels"
 								label="Min Temp (°C)"
 								title="Min Tempture (°C)"
+								color="#3f72af"
 							/>
 						</div>
 						<div class="chart-block">
@@ -126,6 +139,7 @@ export default {
 				})
 				.catch((error) => {
 					this.errors.push(error);
+					console.log(error);
 				});
 		},
 	},
@@ -140,12 +154,20 @@ input {
 button {
 	margin: 0 10px;
 }
-.details-block {
-	margin: 10px 0;
+.details {
+	&__block {
+		margin: 10px 0;
+	}
+	&__label {
+		font-weight: bold;
+	}
+	&__text {
+		margin-bottom: 5px;
+	}
 }
 .chart-block {
-	max-width: 300px;
-	margin: 50px 10px;
+	max-width: 200px;
+	margin: 10px;
 	display: inline-block;
 }
 </style>
