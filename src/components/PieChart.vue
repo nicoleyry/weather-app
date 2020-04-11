@@ -12,10 +12,6 @@ export default {
 			type: Array,
 			required: true,
 		},
-		label: {
-			type: String,
-			required: true,
-		},
 		title: {
 			type: String,
 			required: true
@@ -43,7 +39,6 @@ export default {
 				labels: this.chartlabels,
 				datasets: [
 					{
-						label: this.label,
 						pointBackgroundColor: "white",
 						pointBorderColor: "#249EBF",
 						backgroundColor: "#249EBF",

@@ -11,7 +11,7 @@
 		<v-btn small color="primary" @click="searchDate" class="mb-5"
 			>Search</v-btn
 		>
-		<div v-show="weatherCityList != ''">
+		<v-row v-show="weatherCityList != ''">
 			<v-expansion-panels>
 				<v-expansion-panel
 					@click="details(weatherCity.woeid)"
@@ -21,18 +21,27 @@
 					<v-expansion-panel-header>
 						{{ weatherCity.title }}
 					</v-expansion-panel-header>
-					<!-- <v-expansion-panel-content
-						v-for="weatherData in weatherDataList"
-						:key="weatherData.id"
-					> -->
 					<v-expansion-panel-content>
+						<v-row>
+							<v-col
+								cols="2"
+								class="details-block"
+								v-for="weatherData in weatherDataList"
+								:key="weatherData.id"
+							>
+								<h4>{{ weatherData.applicable_date }}</h4>
+								<img :src="`https://www.metaweather.com/static/img/weather/${weatherData.weather_state_abbr}.svg`">
+								<p>{{ Math.round(weatherData.min_temp) }}°C ~ {{ Math.round(weatherData.max_temp) }}°C</p>
+								<p>Humidity:{{ weatherData.humidity }}%</p>
+							</v-col>
+						</v-row>
 						<div class="chart-block">
 							<bar-chart
 								v-if="loaded"
 								:chartdata="maxTempData"
 								:chartlabels="chartlabels"
-								label="Max Temp"
-								title="Max Tempture"
+								label="Max Temp (°C)"
+								title="Max Tempture (°C)"
 							/>
 						</div>
 						<div class="chart-block">
@@ -40,30 +49,22 @@
 								v-if="loaded"
 								:chartdata="minTempData"
 								:chartlabels="chartlabels"
-								label="Min Temp"
-								title="Min Tempture"
+								label="Min Temp (°C)"
+								title="Min Tempture (°C)"
 							/>
 						</div>
 						<div class="chart-block">
-							<pie-chart 
+							<pie-chart
 								v-if="loaded"
 								:chartdata="humidityData"
 								:chartlabels="chartlabels"
-								label="Humidity"
-								title="Humidity"
+								title="Humidity (%)"
 							/>
 						</div>
-						<!-- <p>Date: {{ weatherData.applicable_date }}</p>
-						<p>
-							Weather State: {{ weatherData.weather_state_name }}
-						</p>
-						<p>Min Temp: {{ Math.round(weatherData.min_temp) }}</p>
-						<p>Max Temp: {{ Math.round(weatherData.max_temp) }}</p>
-						<p>Humidity: {{ weatherData.humidity }}</p> -->
 					</v-expansion-panel-content>
 				</v-expansion-panel>
 			</v-expansion-panels>
-		</div>
+		</v-row>
 	</div>
 </template>
 
@@ -75,7 +76,7 @@ export default {
 	name: "Weather",
 	components: {
 		BarChart,
-		PieChart
+		PieChart,
 	},
 	data() {
 		return {
@@ -138,6 +139,9 @@ input {
 }
 button {
 	margin: 0 10px;
+}
+.details-block {
+	margin: 10px 0;
 }
 .chart-block {
 	max-width: 300px;
