@@ -21,18 +21,35 @@
 					<v-expansion-panel-header>
 						{{ weatherCity.title }}
 					</v-expansion-panel-header>
-					<v-expansion-panel-content
+					<!-- <v-expansion-panel-content
 						v-for="weatherData in weatherDataList"
 						:key="weatherData.id"
-					>
-						<p>Date: {{ weatherData.applicable_date }}</p>
+					> -->
+					<v-expansion-panel-content>
+						<div class="chart-block">
+							<bar-chart
+								v-if="loaded"
+								:chartdata="maxTempData"
+								:chartlabels="chartlabels"
+								label="Max Temp"
+							/>
+						</div>
+						<div class="chart-block">
+							<bar-chart
+								v-if="loaded"
+								:chartdata="minTempData"
+								:chartlabels="chartlabels"
+								label="Min Temp"
+							/>
+						</div>
+
+						<!-- <p>Date: {{ weatherData.applicable_date }}</p>
 						<p>
 							Weather State: {{ weatherData.weather_state_name }}
 						</p>
 						<p>Min Temp: {{ Math.round(weatherData.min_temp) }}</p>
 						<p>Max Temp: {{ Math.round(weatherData.max_temp) }}</p>
-						<p>Humidity: {{ weatherData.humidity }}</p>
-						<hr />
+						<p>Humidity: {{ weatherData.humidity }}</p> -->
 					</v-expansion-panel-content>
 				</v-expansion-panel>
 			</v-expansion-panels>
@@ -42,18 +59,25 @@
 
 <script>
 import axios from "axios";
+import BarChart from "@/components/BarChart";
 export default {
 	name: "Weather",
+	components: {
+		BarChart,
+	},
 	data() {
 		return {
 			searchedLocation: this.value,
 			weatherCityList: [],
 			weatherDataList: [],
+			loaded: false,
+			maxTempData: null,
+			minTempData: null,
+			chartlabels: [],
 		};
 	},
 	methods: {
 		searchDate() {
-			console.log(this.searchedLocation);
 			axios
 				.get(
 					`https://www.metaweather.com/api/location/search/?query=` +
@@ -61,22 +85,30 @@ export default {
 				)
 				.then((res) => {
 					this.weatherCityList = res.data;
-					console.table(this.weatherCityList);
 				})
 				.catch((e) => {
 					this.errors.push(e);
 				});
 		},
 		details(woeId) {
-			console.log(woeId);
+			this.loaded = false;
 			axios
 				.get(`https://www.metaweather.com/api/location/` + woeId)
 				.then((res) => {
 					this.weatherDataList = res.data.consolidated_weather;
-					console.table(this.weatherDataList);
+					this.maxTempData = this.weatherDataList.map(
+						(e) => `${Math.round(e.max_temp)}`
+					);
+					this.minTempData = this.weatherDataList.map(
+						(e) => `${Math.round(e.min_temp)}`
+					);
+					this.chartlabels = this.weatherDataList.map(
+						(e) => `${e.applicable_date}`
+					);
+					this.loaded = true;
 				})
-				.catch((e) => {
-					this.errors.push(e);
+				.catch((error) => {
+					this.errors.push(error);
 				});
 		},
 	},
@@ -90,5 +122,10 @@ input {
 }
 button {
 	margin: 0 10px;
+}
+.chart-block {
+	max-width: 200px;
+	margin: 50px 10px;
+	display: inline-block;
 }
 </style>
