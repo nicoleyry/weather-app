@@ -11,7 +11,18 @@
 		<v-btn large color="primary" @click="searchDate" class="mb-5">
 			Search
 		</v-btn>
-		<v-row v-show="weatherCityList != ''">
+		<v-row v-if="loadingCities">
+			<v-col cols="2" offset="5">
+				<div class="loading_box">
+					<p>Loading...</p>
+					<div class="line"></div>
+					<div class="line"></div>
+					<div class="line"></div>
+				</div>
+			</v-col>
+		</v-row>
+		<!-- <v-row v-show="weatherCityList != ''"> -->
+		<v-row v-if="!loadingCities">
 			<v-expansion-panels>
 				<v-expansion-panel
 					style="background: #f9f7f7;"
@@ -19,7 +30,9 @@
 					v-for="weatherCity in weatherCityList"
 					:key="weatherCity.woeid"
 				>
-					<v-expansion-panel-header style="font-size: 24px; color: #112d4e;">
+					<v-expansion-panel-header
+						style="font-size: 24px; color: #112d4e;"
+					>
 						{{ weatherCity.title }}
 					</v-expansion-panel-header>
 					<v-expansion-panel-content v-if="loading">
@@ -38,7 +51,9 @@
 								v-for="weatherData in weatherDataList"
 								:key="weatherData.id"
 							>
-								<h3 class="details__date">{{ weatherData.applicable_date }}</h3>
+								<h3 class="details__date">
+									{{ weatherData.applicable_date }}
+								</h3>
 								<img
 									:src="
 										`https://www.metaweather.com/static/img/weather/${weatherData.weather_state_abbr}.svg`
@@ -95,8 +110,8 @@ import axios from "axios";
 import BarChart from "@/components/BarChart";
 import PieChart from "@/components/PieChart";
 
-const cors = 'https://cors-anywhere.herokuapp.com/'; // use cors-anywhere to fetch api data
-const url = 'https://www.metaweather.com/'; // origin api url
+const cors = "https://cors-anywhere.herokuapp.com/"; // use cors-anywhere to fetch api data
+const url = "https://www.metaweather.com/"; // origin api url
 
 export default {
 	name: "Weather",
@@ -110,6 +125,7 @@ export default {
 			weatherCityList: [],
 			weatherDataList: [],
 			loading: true,
+			loadingCities: false,
 			maxTempData: null,
 			minTempData: null,
 			humidityData: null,
@@ -118,6 +134,7 @@ export default {
 	},
 	methods: {
 		searchDate() {
+			this.loadingCities = true;
 			axios
 				.get(
 					`${cors}${url}api/location/search/?query=` +
@@ -125,6 +142,7 @@ export default {
 				)
 				.then(res => {
 					this.weatherCityList = res.data;
+					this.loadingCities = false;
 				})
 				.catch(error => {
 					console.log(error);
@@ -193,6 +211,11 @@ button {
 }
 .loading_box {
 	margin: 20px;
+	p {
+		font-weight: bold;
+		color: #112d4e;
+		font-size: 20px;
+	}
 }
 .line {
 	display: inline-block;
