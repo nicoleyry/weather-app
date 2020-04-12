@@ -1,6 +1,6 @@
 <template>
 	<div id="footer">
-		<p id="footer__text">Made by <a href="https://nicoley.netlify.com/">Nicole</a> with ❤️</p>
+		<p id="footer__text">Made by <a href="https://nicoley.netlify.com/" target="_blank">Nicole</a> with ❤️</p>
 	</div>
 </template>
 

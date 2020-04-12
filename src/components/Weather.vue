@@ -25,13 +25,13 @@
 		<v-row v-if="!loadingCities">
 			<v-expansion-panels>
 				<v-expansion-panel
-					style="background: #f9f7f7;"
 					@click="details(weatherCity.woeid)"
 					v-for="weatherCity in weatherCityList"
 					:key="weatherCity.woeid"
+					class="results__panel"
 				>
 					<v-expansion-panel-header
-						style="font-size: 24px; color: #112d4e;"
+						class="results__header"
 					>
 						{{ weatherCity.title }}
 					</v-expansion-panel-header>
@@ -188,6 +188,15 @@ input {
 }
 button {
 	margin: 0 10px;
+}
+.results {
+	&__panel {
+		background-color: #d1f7fa !important;
+	}
+	&__header {
+		font-size: 24px; 
+		color: #112d4e;
+	}
 }
 .details {
 	&__block {
