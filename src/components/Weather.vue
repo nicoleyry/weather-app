@@ -52,7 +52,10 @@
 								:key="weatherData.id"
 							>
 								<h3 class="details__date">
-									{{ weatherData.applicable_date }}
+									{{ momentWeekday(weatherData.applicable_date) }}
+								</h3>
+								<h3 class="details__date">
+									{{ momentDate(weatherData.applicable_date) }}
 								</h3>
 								<img
 									:src="
@@ -67,7 +70,7 @@
 									<span class="details__label">Min:</span>
 									{{ Math.round(weatherData.max_temp) }}°C
 								</p>
-								<p>{{ weatherData.humidity }}%</p>
+								<p>💧: {{ weatherData.humidity }}%</p>
 							</v-col>
 						</v-row>
 						<div class="chart-block">
@@ -109,6 +112,7 @@
 import axios from "axios";
 import BarChart from "@/components/BarChart";
 import PieChart from "@/components/PieChart";
+import moment from "moment";
 
 const cors = "https://cors-anywhere.herokuapp.com/"; // use cors-anywhere to fetch api data
 const url = "https://www.metaweather.com/"; // origin api url
@@ -171,6 +175,27 @@ export default {
 				.catch(error => {
 					console.log(error);
 				});
+		},
+		momentWeekday(date) {
+			const day = moment(date).weekday();
+			if(day === 0) {
+				return 'Sunday';
+			} else if (day === 1) {
+				return 'Monday';
+			} else if (day === 2) {
+				return 'Tuesday';
+			} else if (day === 3) {
+				return 'Wednesday';
+			} else if (day === 4) {
+				return 'Thursday';
+			} else if (day === 5) {
+				return 'Friday';
+			} else if (day === 6) {
+				return 'Saturday';
+			}
+		},
+		momentDate(date) {
+			return moment(date).format('MM/DD');
 		}
 	}
 };
