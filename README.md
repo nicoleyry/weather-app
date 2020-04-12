@@ -1,4 +1,15 @@
-# weather-app
+# Weather App
+
+### This app is built with:
+* [Vue CLI](https://cli.vuejs.org/)
+* [MetaWeather API](https://www.metaweather.com/api/)
+* [Vuetify](https://vuetifyjs.com/en/)
+* [Vue-chartjs](https://vue-chartjs.org/)
+* [Axios](https://github.com/axios/axios)
+* [CORS Anywhere](https://github.com/Rob--W/cors-anywhere/)
+* [Patternomaly](https://github.com/ashiguruma/patternomaly)
+* [Moment.js](https://momentjs.com/)
+
 
 ## Project setup
 ```
@@ -15,10 +26,6 @@ yarn serve
 yarn build
 ```
 
-### Lints and fixes files
-```
-yarn lint
-```
+## Live Demo
+[See here](https://nicoley-weather-app.netlify.com)
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
