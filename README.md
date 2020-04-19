@@ -27,5 +27,5 @@ yarn build
 ```
 
 ## Live Demo
-[See here](https://nicoley-weather-app.netlify.com)
+[See here](https://nicoleyyr-weather-app.netlify.com)
 
