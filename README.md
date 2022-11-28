@@ -1,5 +1,9 @@
 # Weather App
 
+***
+## ***Unfortunately, this app isn't working now due to the MetaWeather server being down.*** 😞
+***
+
 ### This app is built with:
 * [Vue CLI](https://cli.vuejs.org/)
 * [MetaWeather API](https://www.metaweather.com/api/)
